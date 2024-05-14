@@ -1,3 +1,4 @@
+--sohaib's code
 CREATE TABLE Customers (
     CustomerID INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(255),
