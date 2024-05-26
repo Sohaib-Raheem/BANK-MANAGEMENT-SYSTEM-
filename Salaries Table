@@ -1,0 +1,14 @@
+CREATE TABLE Salaries (
+    SalaryID INT AUTO_INCREMENT PRIMARY KEY,
+    EmployeeID INT,
+    Amount DECIMAL(15, 2),
+    PaymentDate DATE,
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+);
+
+INSERT INTO Salaries (EmployeeID, Amount, PaymentDate)
+VALUES 
+((SELECT EmployeeID FROM Employees WHERE Name = 'Hussain'), 90000.00, '2024-06-01'),
+((SELECT EmployeeID FROM Employees WHERE Name = 'Taimoor'), 45000.00, '2024-06-01'),
+((SELECT EmployeeID FROM Employees WHERE Name = 'Sohaib'), 60000.00, '2024-06-01'),
+((SELECT EmployeeID FROM Employees WHERE Name = 'Muskan'), 100000.00, '2024-06-01');
