@@ -1,11 +1,18 @@
 # Banking Management System - DBS Project
+## Group Members:
+Muhammad Hussain (Leader)
+Muhammad Taimoor
+Sohaib Ahmed
 
 ## Description
-The Banking Management System is a PHP application that simulates basic banking operations. It provides a user-friendly interface for managing accounts, transactions, and other essential banking functions.
+Description:
+The Bank Management System in MySQL is a robust database system that centralizes and streamlines banking operations by managing employee details, department assignments, ATM statuses, customer accounts, transactions, and more. This system ensures data integrity, security, and accessibility, providing an effective way to manage the bank's internal and external processes.
 
-## Features
-- Account creation and management
-- Deposit and withdrawal transactions
-- Balance inquiry
-- Transaction history
-- Loans Detals
+## Key Components:
+Employees: Stores information about bank employees, their positions, salaries, and departmental affiliations.
+Departments: Holds details about various departments within the bank.
+ATMs: Manages data about ATM locations, statuses, and operational details.
+Customers and Accounts: Keeps track of customer information and their respective bank accounts.
+Transactions: Logs all transactions, including deposits, withdrawals, and transfers
+
+
