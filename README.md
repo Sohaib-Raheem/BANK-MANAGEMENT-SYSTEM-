@@ -14,4 +14,3 @@ The Bank Management System in MySQL is a robust database system that centralizes
 ## Customers and Accounts: Keeps track of customer information and their respective bank accounts.
 ## Transactions: Logs all transactions, including deposits, withdrawals, and transfers
 
-
