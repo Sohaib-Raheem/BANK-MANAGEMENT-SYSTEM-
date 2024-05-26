@@ -1,0 +1,11 @@
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY AUTO_INCREMENT,
+    DepartmentName VARCHAR(50)
+);
+
+INSERT INTO Departments (DepartmentName)
+VALUES 
+    ('Finance'), 
+    ('Customer Service'), 
+    ('IT Specialist'), 
+    ('HR');
