@@ -1,0 +1,44 @@
+-- querry to find all transaction for a specific customer
+ 
+SELECT t.TransactionID, t.TransactionType, t.Amount, t.TransactionDate
+FROM Transactions t
+JOIN Accounts a ON t.AccountID = a.AccountID
+JOIN Customers c ON a.CustomerID = c.CustomerID
+WHERE c.Name = 'Hafsa';
+
+-- querry to find calculate the total balance of all account in branches 
+
+SELECT b.Location, SUM(a.Balance) AS TotalBalance
+FROM Branches b
+JOIN Employees e ON b.BranchID = e.BranchID
+JOIN Accounts a ON e.EmployeeID = b.ManagerID
+WHERE b.Location = 'Lahore';
+
+
+-- querry to find employee working in dept
+
+SELECT e.Name, e.Position, d.DepartmentName
+FROM Employees e
+JOIN Departments d ON e.DeptID = d.DepartmentID
+WHERE d.DepartmentName = 'HR';
+
+
+-- query to list all customer account with their respective accounts balance and loan amount 
+
+SELECT c.Name, a.Balance, l.Amount AS LoanAmount
+FROM Customers c
+JOIN Accounts a ON c.CustomerID = a.CustomerID
+LEFT JOIN Loans l ON a.AccountID = l.AccountID;
+
+
+-- query to find all active & inactive branches in city
+
+SELECT a.ATMID, a.Location
+FROM ATM a
+WHERE a.Status = 'InActive' AND a.Location LIKE '%Karachi%';
+
+SELECT a.ATMID, a.Location
+FROM ATM a
+WHERE a.Status = 'Active' AND a.Location LIKE '%Karachi%';
+
+
