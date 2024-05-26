@@ -1,0 +1,12 @@
+CREATE TABLE Branches (
+    BranchID INT AUTO_INCREMENT PRIMARY KEY,
+    Location VARCHAR(100),
+    ManagerID INT UNIQUE,
+    FOREIGN KEY (ManagerID) REFERENCES Employees(EmployeeID)
+);
+
+INSERT INTO Branches (Location, ManagerID)
+VALUES 
+('Karachi', (SELECT EmployeeID FROM Employees WHERE Name = 'Hussain')),
+('Lahore', (SELECT EmployeeID FROM Employees WHERE Name = 'Taimoor')),
+('Islamabad', (SELECT EmployeeID FROM Employees WHERE Name = 'Sohaib'));
