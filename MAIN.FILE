@@ -1,0 +1,220 @@
+-- PORJECT:
+-- BANK MANAGEMENT SYSTEM
+-- GROUP MEMBERS: 
+-- 1. Muhammad Hussain (BSE-23F-059)
+-- 2. Muhammad Taimoor (BSE-23F-086)
+-- 3. Sohaib Raheem (BSE-23F-075)
+ 
+CREATE DATABASE BANK_MANAGEMENT_SYSTEM;
+USE BANK_MANAGEMENT_SYSTEM;
+
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY AUTO_INCREMENT,
+    DepartmentName VARCHAR(50)
+);
+
+INSERT INTO Departments (DepartmentName)
+VALUES 
+    ('Finance'), 
+    ('Customer Service'), 
+    ('IT Specialist'), 
+    ('HR');
+
+CREATE TABLE Employees (
+    EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(30),
+    Position VARCHAR(50),
+    Salary DECIMAL(15, 2),
+    BranchID INT UNIQUE,
+    DeptID INT,
+    FOREIGN KEY (DeptID) REFERENCES Departments(DepartmentID)
+);
+
+INSERT INTO Employees (Name, Position, Salary, BranchID, DeptID)
+VALUES 
+    ('Hussain', 'Manager', 90000.00, 1, (SELECT DepartmentID FROM Departments WHERE DepartmentName = 'Finance')),
+    ('Taimoor', 'Clerk', 45000.00, 2, (SELECT DepartmentID FROM Departments WHERE DepartmentName = 'Customer Service')),
+    ('Sohaib', 'IT Specialist', 60000.00, 3, (SELECT DepartmentID FROM Departments WHERE DepartmentName = 'IT Specialist')),
+    ('Muskan', 'HR Manager', 100000.00, 4, (SELECT DepartmentID FROM Departments WHERE DepartmentName = 'HR'));
+
+CREATE TABLE Branches (
+    BranchID INT AUTO_INCREMENT PRIMARY KEY,
+    Location VARCHAR(100),
+    ManagerID INT UNIQUE,
+    FOREIGN KEY (ManagerID) REFERENCES Employees(EmployeeID)
+);
+
+INSERT INTO Branches (Location, ManagerID)
+VALUES 
+('Karachi', (SELECT EmployeeID FROM Employees WHERE Name = 'Hussain')),
+('Lahore', (SELECT EmployeeID FROM Employees WHERE Name = 'Taimoor')),
+('Islamabad', (SELECT EmployeeID FROM Employees WHERE Name = 'Sohaib'));
+select * from bank_management_system.Branches;
+
+CREATE TABLE Salaries (
+    SalaryID INT AUTO_INCREMENT PRIMARY KEY,
+    EmployeeID INT,
+    Amount DECIMAL(15, 2),
+    PaymentDate DATE,
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+);
+
+INSERT INTO Salaries (EmployeeID, Amount, PaymentDate)
+VALUES 
+((SELECT EmployeeID FROM Employees WHERE Name = 'Hussain'), 90000.00, '2024-06-01'),
+((SELECT EmployeeID FROM Employees WHERE Name = 'Taimoor'), 45000.00, '2024-06-01'),
+((SELECT EmployeeID FROM Employees WHERE Name = 'Sohaib'), 60000.00, '2024-06-01'),
+((SELECT EmployeeID FROM Employees WHERE Name = 'Muskan'), 100000.00, '2024-06-01');
+
+ CREATE TABLE Customers (
+    CustomerID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(50),
+    Address VARCHAR(100),
+    Phone VARCHAR(20),
+    Email VARCHAR(50)
+);
+
+INSERT INTO Customers (Name, Address, Phone, Email)
+VALUES 
+('Haleema Sultan', 'Defence Phase 8', '03003512478', 'Haleema@gmail.com'),
+('Imran khan', 'Bani Gala', '03162547891', 'Khan@gmail.com'),
+('Hafsa', 'Commander City', '03156214793', 'Hafsa@gmail.com');
+select * from bank_management_system.Customers;
+
+CREATE TABLE Accounts (
+    AccountID INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerID INT,
+    AccountType VARCHAR(50),
+    Balance DECIMAL(15, 2),
+    OpenDate DATE,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+INSERT INTO Accounts (CustomerID, AccountType, Balance, OpenDate)
+VALUES 
+((SELECT CustomerID FROM Customers WHERE Name = 'Haleema Sultan' LIMIT 1), 'Savings', 10000.00, '2023-07-15'),
+((SELECT CustomerID FROM Customers WHERE Name = 'Imran Khan' LIMIT 1), 'Checking', 5000.00, '2024-03-7'),
+((SELECT CustomerID FROM Customers WHERE Name = 'Hafsa' LIMIT 1), 'Current', 5000.00, '2021-04-09');
+Select * From bank_management_system.Accounts;
+
+CREATE TABLE Cards (
+    CardID INT AUTO_INCREMENT PRIMARY KEY,
+    AccountID INT,
+    CardType VARCHAR(50),
+    ExpiryDate DATE,
+    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
+);
+
+INSERT INTO Cards (AccountID, CardType, ExpiryDate)
+VALUES 
+((SELECT AccountID FROM Accounts WHERE CustomerID = (SELECT CustomerID FROM Customers WHERE NAME AND Email = 'Haleema Sultan' 'Haleema@gmail.com' LIMIT 1)), 'Debit', '2026-01-01'),
+((SELECT AccountID FROM Accounts WHERE CustomerID = (SELECT CustomerID FROM Customers WHERE NAME AND Email = 'Imran Khan' 'Khan@gmail.com' LIMIT 1)), 'Credit', '2026-02-01'),
+((SELECT AccountID FROM Accounts WHERE CustomerID = (SELECT CustomerID FROM Customers WHERE NAME AND Email = 'Hafsa' 'Hafsa@gmail.com' LIMIT 1)), 'Debit' , '2026-02-01');
+
+SELECT * FROM cards;
+
+ CREATE TABLE ATM (
+    ATMID INT AUTO_INCREMENT PRIMARY KEY,
+    Location VARCHAR(50),
+    Status ENUM('Active', 'Inactive')
+);
+
+INSERT INTO ATM (Location, Status)
+VALUES 
+('Malir,Krachi', 'InActive'),
+('Defence,Karachi', 'active'),
+('Defence,Lahore', 'Inactive'),
+('Bahria Town,Karachi', 'active'),
+('Main street,Islamabad', 'active'),
+('Korangi,Karachi', 'Inactive');
+
+CREATE TABLE Transactions (
+    TransactionID INT AUTO_INCREMENT PRIMARY KEY,
+    AccountID INT,
+    TransactionType VARCHAR(50),
+    Amount DECIMAL(15, 2),
+    TransactionDate TIMESTAMP,
+    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
+);
+
+INSERT INTO Transactions (AccountID, TransactionType, Amount, TransactionDate)
+SELECT a.AccountID, 'Deposit', 2000.00, '2024-05-27 10:00:00'
+FROM Accounts a
+JOIN Customers c ON a.CustomerID = c.CustomerID
+WHERE c.Name = 'Hafsa'
+LIMIT 1;
+
+INSERT INTO Transactions (AccountID, TransactionType, Amount, TransactionDate)
+SELECT a.AccountID, 'Withdrawal', 1000.00, '2024-05-28 12:00:00'
+FROM Accounts a
+JOIN Customers c ON a.CustomerID = c.CustomerID
+WHERE c.Name = 'Hafsa'
+LIMIT 1;
+select * from Transactions;
+
+CREATE TABLE Loans (
+    LoanID INT AUTO_INCREMENT PRIMARY KEY,
+    AccountID INT,
+    Amount DECIMAL(15, 2),
+    InterestRate DECIMAL(5, 2),
+    StartDate DATE,
+    EndDate DATE,
+    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
+);
+
+INSERT INTO Loans (AccountID, Amount, InterestRate, StartDate, EndDate)
+SELECT a.AccountID, 15000.00, 3.5, '2023-04-01', '2028-04-01'
+FROM Accounts a
+JOIN Customers c ON a.CustomerID = c.CustomerID
+WHERE c.Name = 'Haleema Sultan'
+LIMIT 1;
+select * from Loans;
+
+INSERT INTO Loans (AccountID, Amount, InterestRate, StartDate, EndDate)
+SELECT a.AccountID, 20000.00, 4.0, '2023-05-01', '2029-05-01'
+FROM Accounts a
+JOIN Customers c ON a.CustomerID = c.CustomerID
+WHERE c.Name = 'Imran khan'
+LIMIT 1;
+select * from Loans;
+
+-- querry to find all transaction for a specific customer
+ 
+SELECT t.TransactionID, t.TransactionType, t.Amount, t.TransactionDate
+FROM Transactions t
+JOIN Accounts a ON t.AccountID = a.AccountID
+JOIN Customers c ON a.CustomerID = c.CustomerID
+WHERE c.Name = 'Hafsa';
+
+-- querry to find calculate the total balance of all account in branches 
+
+SELECT b.Location, SUM(a.Balance) AS TotalBalance
+FROM Branches b
+JOIN Employees e ON b.BranchID = e.BranchID
+JOIN Accounts a ON e.EmployeeID = b.ManagerID
+WHERE b.Location = 'Lahore';
+
+-- querry to find employee working in dept
+
+SELECT e.Name, e.Position, d.DepartmentName
+FROM Employees e
+JOIN Departments d ON e.DeptID = d.DepartmentID
+WHERE d.DepartmentName = 'HR';
+
+-- query to list all customer account with their respective accounts balance and loan amount 
+
+SELECT c.Name, a.Balance, l.Amount AS LoanAmount
+FROM Customers c
+JOIN Accounts a ON c.CustomerID = a.CustomerID
+LEFT JOIN Loans l ON a.AccountID = l.AccountID;
+
+-- query to find all active & inactive branches in city
+
+SELECT a.ATMID, a.Location
+FROM ATM a
+WHERE a.Status = 'InActive' AND a.Location LIKE '%Karachi%';
+
+SELECT a.ATMID, a.Location
+FROM ATM a
+WHERE a.Status = 'Active' AND a.Location LIKE '%Karachi%';
+
