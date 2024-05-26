@@ -1,0 +1,16 @@
+CREATE TABLE Employees (
+    EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(30),
+    Position VARCHAR(50),
+    Salary DECIMAL(15, 2),
+    BranchID INT UNIQUE,
+    DeptID INT,
+    FOREIGN KEY (DeptID) REFERENCES Departments(DepartmentID)
+);
+
+INSERT INTO Employees (Name, Position, Salary, BranchID, DeptID)
+VALUES 
+    ('Hussain', 'Manager', 90000.00, 1, (SELECT DepartmentID FROM Departments WHERE DepartmentName = 'Finance')),
+    ('Taimoor', 'Clerk', 45000.00, 2, (SELECT DepartmentID FROM Departments WHERE DepartmentName = 'Customer Service')),
+    ('Sohaib', 'IT Specialist', 60000.00, 3, (SELECT DepartmentID FROM Departments WHERE DepartmentName = 'IT Specialist')),
+    ('Muskan', 'HR Manager', 100000.00, 4, (SELECT DepartmentID FROM Departments WHERE DepartmentName = 'HR'));
