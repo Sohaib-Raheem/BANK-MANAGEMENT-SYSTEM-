@@ -1,0 +1,23 @@
+CREATE TABLE Loans (
+    LoanID INT AUTO_INCREMENT PRIMARY KEY,
+    AccountID INT,
+    Amount DECIMAL(15, 2),
+    InterestRate DECIMAL(5, 2),
+    StartDate DATE,
+    EndDate DATE,
+    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
+);
+
+INSERT INTO Loans (AccountID, Amount, InterestRate, StartDate, EndDate)
+SELECT a.AccountID, 15000.00, 3.5, '2023-04-01', '2028-04-01'
+FROM Accounts a
+JOIN Customers c ON a.CustomerID = c.CustomerID
+WHERE c.Name = 'Haleema Sultan'
+LIMIT 1;
+
+INSERT INTO Loans (AccountID, Amount, InterestRate, StartDate, EndDate)
+SELECT a.AccountID, 20000.00, 4.0, '2023-05-01', '2029-05-01'
+FROM Accounts a
+JOIN Customers c ON a.CustomerID = c.CustomerID
+WHERE c.Name = 'Imran khan'
+LIMIT 1;
